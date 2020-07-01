@@ -36,10 +36,20 @@ class UI {
         });
         productsDOM.innerHTML = productsHtml;
     }
+
+    getBagBtns() {
+        const btns = [...document.querySelectorAll('.bag-btn')];
+        btns.forEach(btn => {
+            let id = btn.dataset.id;
+            console.log(id);
+        })
+    }
 }
 
 class Storage {
-
+    static saveProducts(products) {
+        localStorage.setItem("products", JSON.stringify(products));
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -56,6 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const ui = new UI();
     const productsController = new ProductsController();
     productsController.getProducts()
-    .then(products => ui.displayProducts(products, productsDOM));
+    .then(products => {
+        ui.displayProducts(products, productsDOM);
+        Storage.saveProducts(products);
+    }).then(() => {
+        ui.getBagBtns();
+    });
     
 });
