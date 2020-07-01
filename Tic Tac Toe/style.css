@@ -1,0 +1,22 @@
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 610px;
+    height: 610px;
+    background-color: black;
+}
+
+.grid div {
+    background-color: white;
+    width: 200px;
+    height: 200px;
+}
+
+.cross {
+    background-image: url('cross.png');
+}
+
+.circle {
+    background-image: url('circle.png');
+}
