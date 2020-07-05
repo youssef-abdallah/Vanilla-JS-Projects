@@ -53,6 +53,8 @@ class UI {
                 cart.push(productInCart);
                 Storage.saveCart(cart);
                 this.setCartValues(cart);
+                this.addCartItem(productInCart);
+                this.showCart();
             });
                         
         })
@@ -66,6 +68,10 @@ class UI {
         this.cartItems = cartItems;
     }
 
+    setCartContent(cartContent) {
+        this.cartContent = cartContent;
+    }
+
     setCartValues(cart) {
         let totalPrices = 0;
         let totalItems = 0;
@@ -75,6 +81,37 @@ class UI {
         });
         this.cartTotal.innerText = parseFloat(totalPrices.toFixed(2));
         this.cartItems.innerText = totalItems;
+    }
+
+    addCartItem(cartItem) {
+        const ItemDiv = document.createElement('div');
+        ItemDiv.classList.add('cart-item');
+        ItemDiv.innerHTML = `<img src="${cartItem.img}">
+        <div>
+            <h4>${cartItem.title}</h4>
+            <h5>${cartItem.price}</h5>
+            <span class="remove-item">remove</span>
+        </div>
+        <div>
+            <i class="fa fa-chevron-up" aria-hidden="true" data-id=${cartItem.id}></i>
+            <p class="item-amount">${cartItem.amount}</p>
+            <i class="fa fa-chevron-down" aria-hidden="true" data-id=${cartItem.id}></i>
+        </div>`
+        this.cartContent.appendChild(ItemDiv);
+        console.log(this.cartContent);
+    }
+
+    setCartOverlay(cartOverlay) {
+        this.cartOverlay = cartOverlay;
+    }
+
+    showCart() {
+        this.cartOverlay.classList.add('transparentBcg');
+        this.cartDOM.classList.add('showCart');
+    }
+
+    setCartDOM(cartDOM) {
+        this.cartDOM = cartDOM;
     }
 }
 
@@ -107,6 +144,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const ui = new UI();
     ui.setCartTotal(cartTotal);
     ui.setCartItems(cartItems);
+    ui.setCartContent(cartContent);
+    ui.setCartOverlay(cartOverlay);
+    ui.setCartDOM(cartDOM);
     const productsController = new ProductsController();
     productsController.getProducts()
     .then(products => {
