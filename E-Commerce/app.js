@@ -95,7 +95,7 @@ class UI {
         <div>
             <h4>${cartItem.title}</h4>
             <h5>${cartItem.price}</h5>
-            <span class="remove-item">remove</span>
+            <span class="remove-item" data-id=${cartItem.id}>remove</span>
         </div>
         <div>
             <i class="fa fa-chevron-up" aria-hidden="true" data-id=${cartItem.id}></i>
@@ -169,6 +169,33 @@ class UI {
     cartLogic() {
         this.clearCartBtn.addEventListener('click', () => {
             this.clearCart();
+        });
+        this.cartContent.addEventListener('click', evt => {
+            if (evt.target.classList.contains('remove-item')) {
+                let itemToRemove = evt.target;
+                let id = itemToRemove.dataset.id;
+                this.cartContent.removeChild(itemToRemove.parentElement.parentElement);
+                this.removeItem(id);
+            } else if (evt.target.classList.contains('fa-chevron-up')) {
+                let id = evt.target.dataset.id;
+                let currentItem = this.cart.find(item => item.id === id);
+                currentItem.amount = currentItem.amount + 1;
+                Storage.saveCart(this.cart);
+                this.setCartValues(this.cart);
+                evt.target.nextElementSibling.innerText = currentItem.amount;
+            } else if (evt.target.classList.contains('fa-chevron-down')) {
+                let id = evt.target.dataset.id;
+                let currentItem = this.cart.find(item => item.id === id);
+                currentItem.amount = currentItem.amount - 1;
+                if (currentItem.amount > 0) {
+                    Storage.saveCart(this.cart);
+                    this.setCartValues(this.cart);
+                    evt.target.previousElementSibling.innerText = currentItem.amount;
+                } else if (currentItem.amount <= 0) {
+                    this.cartContent.removeChild(evt.target.parentElement.parentElement);
+                    this.removeItem(id);
+                }
+            }
         });
     }
 
